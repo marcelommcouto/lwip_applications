@@ -560,9 +560,20 @@ static bool IsRxEmpty(void)
 static void vPacketReceiveTask(void *pvParameters)
 {
 	lpc_enetdata_t *lpc_enetif = pvParameters;
+//	UBaseType_t uxHighWaterMark;
+
+	/* Inspect our own high water mark on entering the task. */
+//	uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
 
 	while (1)
 	{
+		/* Calling the function will have used some stack space, we would
+		therefore now expect uxTaskGetStackHighWaterMark() to return a
+		value lower than when it was called on entering the task. */
+//		uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+//
+//		printf("\nRx Heap: %d", uxHighWaterMark);
+
 		/* Wait for receive task to wakeup */
 		sys_arch_sem_wait(&lpc_enetif->rx_sem, 0);
 
@@ -579,6 +590,10 @@ static void vTransmitCleanupTask(void *pvParameters)
 {
 	lpc_enetdata_t *lpc_enetif = pvParameters;
 	s16_t idx;
+//	UBaseType_t uxHighWaterMark;
+
+	/* Inspect our own high water mark on entering the task. */
+//	uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
 
 	while (1)
 	{
@@ -623,6 +638,13 @@ static void vTransmitCleanupTask(void *pvParameters)
 		}
 		else
 		{
+			/* Calling the function will have used some stack space, we would
+			therefore now expect uxTaskGetStackHighWaterMark() to return a
+			value lower than when it was called on entering the task. */
+//			uxHighWaterMark = uxTaskGetStackHighWaterMark(NULL );
+//
+//			printf("\nTx Heap: %d", uxHighWaterMark);
+
 			/* Free TX buffers that are done sending */
 			lpc_tx_reclaim(lpc_enetdata.pnetif);
 		}
@@ -965,7 +987,7 @@ err_t lpc_enetif_init(struct netif *netif)
 	/* Packet receive task */
 	err = sys_sem_new(&lpc_enetdata.rx_sem, 0);
 	LWIP_ASSERT("rx_sem creation error", (err == ERR_OK));
-	sys_thread_new("lwiprx_thread", vPacketReceiveTask, netif->state, DEFAULT_THREAD_STACKSIZE, tskRECPKT_PRIORITY);
+	sys_thread_new("lwiprx_thread", vPacketReceiveTask, netif->state, (configMINIMAL_STACK_SIZE * 6), tskRECPKT_PRIORITY);
 
 	/* Transmit cleanup task */
 	err = sys_sem_new(&lpc_enetdata.tx_clean_sem, 0);

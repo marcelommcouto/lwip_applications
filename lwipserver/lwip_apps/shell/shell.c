@@ -30,61 +30,30 @@
  *
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <string.h>
+
 #include "shell.h"
 
 #include "lwip/opt.h"
 
 #if LWIP_NETCONN
 
-#include "string.h"
-#include <stdio.h>
-
 #include "lwip/mem.h"
 #include "lwip/debug.h"
 #include "lwip/def.h"
-#include "lwip/api.h"
 #include "lwip/stats.h"
 
-#define NEWLINE "\n"
-
-/** Define this to 1 if you want to echo back all received characters
- * (e.g. so they are displayed on a remote telnet)
- */
-#ifndef SHELL_ECHO
-#define SHELL_ECHO 0
-#endif
-
-#define BUFSIZE             256
 u8_t buffer[BUFSIZE];
-
-struct command
-{
-	struct netconn *conn;
-	s8_t (* exec)(struct command *);
-	u8_t nargs;
-	char *args[10];
-};
 
 int errno = 0;
 
-#undef IP_HDRINCL
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-
-#define ESUCCESS 0
-#define ESYNTAX -1
-#define ETOOFEW -2
-#define ETOOMANY -3
-#define ECLOSED -4
-
-#define NCONNS 3
 static struct netconn *conns[NCONNS];
-static TaskHandle_t shellhandle = NULL;
 
 /* help_msg is split into 2 strings to prevent exceeding the C89 maximum length of 509 per string */
-static char help_msg1[] = "Available commands:"NEWLINE"\
+static const s8_t help_msg1[] = "Available commands:"NEWLINE"\
 open [IP address] [TCP port]: opens a TCP connection to the specified address."NEWLINE"\
 lstn [TCP port]: sets up a server on the specified port."NEWLINE"\
 acpt [connection #]: waits for an incoming connection request."NEWLINE"\
@@ -92,7 +61,7 @@ send [connection #] [message]: sends a message on a TCP connection."NEWLINE"\
 udpc [local UDP port] [IP address] [remote port]: opens a UDP \"connection\"."NEWLINE"\
 udpl [local UDP port] [IP address] [remote port]: opens a UDP-Lite \"connection\"."NEWLINE"";
 
-static char help_msg2[] = "udpn [local UDP port] [IP address] [remote port]: opens a UDP \"connection\" without checksums."NEWLINE"\
+static const s8_t help_msg2[] = "udpn [local UDP port] [IP address] [remote port]: opens a UDP \"connection\" without checksums."NEWLINE"\
 udpb [local port] [remote port]: opens a UDP broadcast \"connection\"."NEWLINE"\
 usnd [connection #] [message]: sends a message on a UDP connection."NEWLINE"\
 recv [connection #]: receives data on a TCP or UDP connection."NEWLINE"\
@@ -154,9 +123,10 @@ static struct stats_proto* shell_stat_proto_stats[] = {
   &lwip_stats.tcp,
 #endif
 };
+
 const size_t num_protostats = sizeof(shell_stat_proto_stats)/sizeof(struct stats_proto*);
 
-static const char *stat_msgs_proto[] = {
+static const s8_t *stat_msgs_proto[] = {
   " * transmitted ",
   "           * received ",
   "             forwarded ",
@@ -289,7 +259,7 @@ static s8_t com_lstn(struct command *com)
 #ifdef LWIP_DEBUG
 		sendstr(lwip_strerr(err), com->conn);
 #else
-    sendstr("(debugging must be turned on for error message to appear)", com->conn);
+		sendstr("(debugging must be turned on for error message to appear)", com->conn);
 #endif /* LWIP_DEBUG */
     	sendstr(NEWLINE, com->conn);
     	return ESUCCESS;
@@ -1303,7 +1273,10 @@ static void shell_thread(void *arg)
 /*-----------------------------------------------------------------------------------*/
 sys_thread_t shellInit(void *shellconfig, u16_t stacksize, u8_t taskprio)
 {
+	TaskHandle_t shellhandle = NULL;
+
 	shellhandle = sys_thread_new("shellsrv", shell_thread, shellconfig, stacksize, taskprio);
+
 	return(shellhandle);
 }
 

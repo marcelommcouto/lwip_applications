@@ -33,6 +33,36 @@
 #define __SHELL_H__
 
 #include "lwip/api.h"
+#include "cc.h"
+
+#undef IP_HDRINCL
+
+#define ESUCCESS 	0
+#define ESYNTAX 	-1
+#define ETOOFEW 	-2
+#define ETOOMANY 	-3
+#define ECLOSED 	-4
+
+#define NEWLINE 	"\n"
+
+#define NCONNS 		3
+
+#define BUFSIZE		256
+
+/** Define this to 1 if you want to echo back all received characters
+ * (e.g. so they are displayed on a remote telnet)
+ */
+#ifndef SHELL_ECHO
+#define SHELL_ECHO 	0
+#endif
+
+struct command
+{
+	struct netconn *conn;
+	s8_t (* exec)(struct command *);
+	u8_t nargs;
+	char *args[10];
+};
 
 sys_thread_t shellInit(void *shellconfig, u16_t stacksize, u8_t taskprio);
 

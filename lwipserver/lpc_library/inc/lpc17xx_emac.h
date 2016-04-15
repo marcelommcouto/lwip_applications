@@ -78,7 +78,6 @@ extern "C"
  * @{
  */
 
-
 /* EMAC Memory Buffer configuration for 16K Ethernet RAM */
 #define EMAC_NUM_RX_FRAG         5          /**< Num.of RX Fragments 5 * 1536 */
 #define EMAC_NUM_TX_FRAG         3			/**< Num.of TX Fragments 3 * 1536 */

@@ -107,6 +107,8 @@ static void vEthernetTask(void *pvParameters)
 	dhcp_start(&lpc17xx_netif);
 #endif
 
+	shellInit(NULL, (configMINIMAL_STACK_SIZE * 3), DEFAULT_THREAD_PRIO);
+
 	/* This loop monitors the PHY link and will handle cable events via the PHY driver. */
 	while (1)
 	{
