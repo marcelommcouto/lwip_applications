@@ -55,7 +55,7 @@ extern "C" {
  */
 
 /* The PHY address connected the to MII/RMII */
-#define PHYADDR 1
+#define PHYADDR 			1
 #define DP83848_PHYSTS_REG  0x10	/*!< PHY special control/status Reg */
 
 /* DP83848_PHYSTS_REG status definitions */
@@ -65,12 +65,12 @@ extern "C" {
 #define LAN8_SPEED100H      (0 << 1)	/*!< 100BT half duplex */
 #define LAN8_SPEED10H       (1 << 1)	/*!< 10BT half duplex */
 
-#define PHY_LINK_ERROR     (1 << 0)	/*!< PHY status bit for link error */
-#define PHY_LINK_BUSY      (1 << 1)	/*!< PHY status bit for MII link busy */
-#define PHY_LINK_CHANGED   (1 << 2)	/*!< PHY status bit for changed state (not persistent) */
-#define PHY_LINK_CONNECTED (1 << 3)	/*!< PHY status bit for connected state */
-#define PHY_LINK_SPEED100  (1 << 4)	/*!< PHY status bit for 100Mbps mode */
-#define PHY_LINK_FULLDUPLX (1 << 5)	/*!< PHY status bit for full duplex mode */
+#define PHY_LINK_ERROR     	(1 << 0)	/*!< PHY status bit for link error */
+#define PHY_LINK_BUSY      	(1 << 1)	/*!< PHY status bit for MII link busy */
+#define PHY_LINK_CHANGED   	(1 << 2)	/*!< PHY status bit for changed state (not persistent) */
+#define PHY_LINK_CONNECTED 	(1 << 3)	/*!< PHY status bit for connected state */
+#define PHY_LINK_SPEED100  	(1 << 4)	/*!< PHY status bit for 100Mbps mode */
+#define PHY_LINK_FULLDUPLX 	(1 << 5)	/*!< PHY status bit for full duplex mode */
 
 /**
  * @brief	Phy status update state machine
@@ -87,7 +87,7 @@ u32_t lpcPHYStsPoll(void);
  * wait for the PHY to detect a connected cable and remain busy. Use lpcPHYStsPoll to
  * detect cable insertion.
  */
-u32_t lpc_phy_init(void);
+Status lpc_phy_init(void);
 
 /**
  * @}

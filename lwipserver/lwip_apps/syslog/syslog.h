@@ -47,8 +47,8 @@
  * Inclusão de arquivos de cabeçalho da ferramenta de desenvolvimento.
  * Por exemplo: '#include <stdlib.h>'.
  */
-#include "stdio.h"
-#include "string.h"
+#include <stdio.h>
+#include <string.h>
 /*
  * Inclusão de arquivos de cabeçalho sem um arquivo ".c" correspondente.
  * Por exemplo: '#include "stddefs.h"'.

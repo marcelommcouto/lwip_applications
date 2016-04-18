@@ -101,7 +101,7 @@ void lpc_enetif_input(struct netif *netif);
  * @param	netif	: lwip network interface structure pointer
  * @return	The number of new descriptors queued
  */
-u16_t lpc_rx_queue(struct netif *netif);
+u8_t lpc_rx_queue(struct netif *netif);
 
 /**
  * @brief	Call for freeing TX buffers that are complete
@@ -145,7 +145,7 @@ void lpc_emac_set_speed(u8_t mbs_100);
  */
 extern void msDelay(uint32_t ms);
 
-s32_t writephy(u32_t phyreg, u8_t address, u16_t value);
+s8_t writephy(u32_t phyreg, u8_t address, u16_t value);
 s32_t readphy(u32_t phyreg, u8_t address);
 
 #ifdef __cplusplus

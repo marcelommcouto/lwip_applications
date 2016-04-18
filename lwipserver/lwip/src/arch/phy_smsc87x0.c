@@ -53,6 +53,9 @@ static uint32_t physts, olddphysts;
 /* PHY update counter for state machine */
 static int32_t phyustate;
 
+static uint16_t sts;
+static uint32_t temp;
+
 /**
  * @brief	MilliSecond delay function based on FreeRTOS
  * @param	ms	: Number of milliSeconds to delay
@@ -107,10 +110,10 @@ static void smsc_update_phy_sts(uint16_t linksts, uint16_t sdsts)
 }
 
 /* Initialize the DP83848C PHY in RMII mode. */
-u32_t lpc_phy_init(void)
+Status lpc_phy_init(void)
 {
-	u16_t tmp;
-	s16_t i;
+	int32_t tmp;
+	int16_t i = 400;
 
 	/* Initial states for PHY status and state machine */
 	olddphysts = physts = phyustate = 0;
@@ -121,8 +124,7 @@ u32_t lpc_phy_init(void)
 	{
 		return (ERROR);
 	}
-
-	i = 400;
+	//
 	while (i > 0)
 	{
 		msDelay(1);
@@ -157,9 +159,6 @@ u32_t lpc_phy_init(void)
 /* Phy status update state machine */
 uint32_t lpcPHYStsPoll(void)
 {
-	static uint16_t sts;
-	static u32_t temp;
-
 	switch (phyustate)
 	{
 		default:

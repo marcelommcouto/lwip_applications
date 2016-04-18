@@ -75,19 +75,19 @@
 
 #define LWIP_STATS                      0
 #if LWIP_STATS
+#define LWIP_STATS_DISPLAY              1
 #define LINK_STATS                      1
-#define ETHARP_STATS                    1
-#define IP_STATS                        1
-#define IPFRAG_STATS                    1
-#define ICMP_STATS                      1
-#define IGMP_STATS                      1
+#define ETHARP_STATS                    0
+#define IP_STATS                        0
+#define IPFRAG_STATS                    0
+#define ICMP_STATS                      0
+#define IGMP_STATS                      0
 #define UDP_STATS                       1
-#define TCP_STATS                       1
+#define TCP_STATS                       0
 #define MEM_STATS                       0
 #define MEMP_STATS                      0
-#define SYS_STATS                       1
-#define LWIP_STATS_DISPLAY              1
-#define IP6_STATS                       1
+#define SYS_STATS                       0
+#define IP6_STATS                       0
 #define ICMP6_STATS                     0
 #define IP6_FRAG_STATS                  0
 #define MLD6_STATS                      0

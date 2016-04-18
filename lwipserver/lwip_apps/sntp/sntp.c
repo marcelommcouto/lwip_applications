@@ -17,6 +17,7 @@
 #include "netif/etharp.h"
 
 #include "lpc17xx_rtc.h"
+#include "lpc17xx_uart.h"
 
 
 #if LWIP_NETCONN /* don't build if not configured for use in lwipopts.h */
@@ -94,9 +95,11 @@ static void xSntpTask(void *pvParameters)
 		netconn_delete(sendUDPNetConn);
 
 		{	/* New context to gain memory. */
-			uint8_t hour, min, sec;
+			u8_t hour, min, sec;
 
 			printf("\nRTOS Heap: %d\n", xPortGetFreeHeapSize());
+
+			stats_display();
 
 			if(timestamp != 0)
 			{

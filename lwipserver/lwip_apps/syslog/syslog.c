@@ -29,7 +29,6 @@
 #include "lwip/opt.h"
 #include "lwip/arch.h"
 #include "lwip/api.h"
-
 #include "lpc17xx_rtc.h"
 
 /*
@@ -75,7 +74,8 @@ static void syslogTask(void *pvParameters);
  ******************************************************************************/
 void syslogSend(const s8_t *msg, u8_t severity)
 {
-	char *tmptext = (s8_t *)mem_malloc(sizeof(s8_t )*MESSAGESIZE);	/* Allocate space with the size of msg text. */
+	s8_t *tmptext = (s8_t *)mem_malloc(MESSAGESIZE);	/* Allocate space with the size of msg text. */
+
 	if(syslogHandle != NULL)
 	{
 		if(tmptext != NULL)
@@ -103,22 +103,23 @@ void syslogSend(const s8_t *msg, u8_t severity)
 
 				/* TODO: Put complete syslog protocol here! Look: RFC 5424 */
 				n = sprintf(tmptext, "<%d>%.15s %s", MYFACILITY | severity, ctime(&now) + 4, msg); /* Simple Format Message. */
+
 				tmptext[n] = '\0'; 						// Add trailing EOF descriptor
 				message->_next = NULL; 					// This is the last message (we know it)
-				message->text = (char*)mem_malloc(n); // Allocate message
+				message->text = (char*)mem_malloc(n); 	// Allocate message
 				memcpy(message->text, tmptext, n); 		// Set pointer of the allocated message
 				mem_free(tmptext); 						// Free temprorary message space
-				message->size = n; 					// Send message size
-				if(curwp != NULL) 					// If this is not the first message in the queue
+				message->size = n; 						// Send message size
+				if(curwp != NULL) 						// If this is not the first message in the queue
 				{
-					curwp->_next = message; 		// Set previous messages _next to this message
-					curwp = message; 				// Set current message pointer to this message
-					curwp->_next = NULL; 			// Set next to NULL to be sure
+					curwp->_next = message; 			// Set previous messages _next to this message
+					curwp = message; 					// Set current message pointer to this message
+					curwp->_next = NULL; 				// Set next to NULL to be sure
 				}
 				else
 				{
-					first = message; 				// Else this is the first message ever
-					curwp = first; 					// Set curwp pointer to this message also
+					first = message; 					// Else this is the first message ever
+					curwp = first; 						// Set curwp pointer to this message also
 				}
 			}
 			else
@@ -180,6 +181,7 @@ static void syslogTask(void *pvParameters)
 					if(tmp->text != NULL) mem_free(tmp->text);
 				}
 				first = first->_next;
+
 				mem_free(tmp);
 
 				if(first == NULL) curwp = NULL;
