@@ -60,6 +60,7 @@ int main(void)
 	SystemCoreClockUpdate();
 
 	/* Monitor ON. */
+
 	UART_CFG_Type UARTConfigStruct;	/* UART Configuration structure variable. */
 	PINSEL_CFG_Type PinCfg;			/* Pin configuration for UART0. */
 
@@ -76,6 +77,8 @@ int main(void)
 	UARTConfigStruct.Baud_rate = 19200;
 	UART_Init(LPC_UART0, &UARTConfigStruct);
 	UART_TxCmd(LPC_UART0, ENABLE);
+
+	UART_Send(LPC_UART0, "Monitor Enabled.\n", sizeof("\nMonitor Enabled."), BLOCKING);
 
 	/* Monitor On. */
 

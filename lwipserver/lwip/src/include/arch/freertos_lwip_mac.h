@@ -61,7 +61,7 @@ extern "C"
  * system or with LWIP_DEBUG enabled, the priorities might be better
  * the same. */
 #define tskRECPKT_PRIORITY   	(TCPIP_THREAD_PRIO - 1)
-#define tskTXCLEAN_PRIORITY  	(TCPIP_THREAD_PRIO + 2)
+#define tskTXCLEAN_PRIORITY  	(TCPIP_THREAD_PRIO - 1)
 
 /* TODO: Read this data below from FLASH! */
 #define MAC05 					0x00
@@ -76,7 +76,7 @@ extern "C"
 #define IFNAME1 				'n'
 
 /* Define MTU (Maximum Transfer Unit) for this interface. */
-#define IFMTUSIZE				1500
+#define IFMTUSIZE				(EMAC_ETH_MAX_FLEN - 36)//1500
 
 /* Autonegotiation mode enable flag */
 #define PHY_USE_AUTONEG 		1
