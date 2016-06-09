@@ -44,12 +44,17 @@
 /* Freertos/lwip/PHY config. */
 #define LOCK_RX_THREAD					0		/* To protect RX Processing. */
 #define LPC_TX_PBUF_BOUNCE_EN			0
-#define MAC_NO_FILTER					0
 
+#define MAC_NO_FILTER					0
 #if !MAC_NO_FILTER
 #define IP_SOF_BROADCAST                1
 #define IP_SOF_BROADCAST_RECV           1
 #endif
+
+/* Some optimizations... */
+#define IP_REASSEMBLY                   0
+#define IP_FRAG                         0
+#define TCP_MSS                         256
 
 /* Need for memory protection */
 #define SYS_LIGHTWEIGHT_PROT            (NO_SYS == 0)
@@ -100,13 +105,19 @@
 
 /* The number of application tasks communicating with the tcpip_thread + the number of input packets queued for receiving. */
 #define DEFAULT_ACCEPTMBOX_SIZE        	4
-#define DEFAULT_TCP_RECVMBOX_SIZE      	3
-#define DEFAULT_UDP_RECVMBOX_SIZE      	3
+#define DEFAULT_TCP_RECVMBOX_SIZE      	4
+#define DEFAULT_UDP_RECVMBOX_SIZE      	4
 #define TCPIP_MBOX_SIZE                	(DEFAULT_ACCEPTMBOX_SIZE + DEFAULT_TCP_RECVMBOX_SIZE + DEFAULT_UDP_RECVMBOX_SIZE)
 
 /* TCPIP thread must run at higher priority than MAC threads! */
-#define TCPIP_THREAD_PRIO              	(DEFAULT_THREAD_PRIO + 2)
+#define TCPIP_THREAD_PRIO              	(DEFAULT_THREAD_PRIO + 3)
 #define TCPIP_THREAD_STACKSIZE         	(DEFAULT_THREAD_STACKSIZE * 3)
+
+#define LWIP_CHECKSUM_ON_COPY           1
+
+/* Config for Pre Allocation POOL.*/
+//#define PBUF_POOL_SIZE					(2 * EMAC_NUM_RX_FRAG)
+//#define MEM_SIZE						(PBUF_POOL_SIZE * EMAC_ETH_MAX_FLEN)
 
 /* Configurando malloc/free para o LWIP usando o FreeRTOS para gerenciar o acesso a memória. */
 #define MEM_LIBC_MALLOC                 1

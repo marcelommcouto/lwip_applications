@@ -78,7 +78,7 @@ int main(void)
 	UART_Init(LPC_UART0, &UARTConfigStruct);
 	UART_TxCmd(LPC_UART0, ENABLE);
 
-	UART_Send(LPC_UART0, "Monitor Enabled.\n", sizeof("\nMonitor Enabled."), BLOCKING);
+	UART_Send(LPC_UART0, "\nMonitor Enabled.", sizeof("\nMonitor Enabled."), BLOCKING);
 
 	/* Monitor On. */
 
@@ -121,9 +121,7 @@ static void vEthernetTask(void *pvParameters)
 	bool prt_ip = false;
 	uint32_t physts;
 	sys_thread_t hldsntp = NULL;
-
-//	UBaseType_t uxHighWaterMark;
-//	uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );	/* Inspect our own high water mark on entering the task. */
+//	UBaseType_t uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );	/* Inspect our own high water mark on entering the task. */
 
 #if LWIP_DHCP
 	ip4_addr_set_zero(&ipaddr);
@@ -156,8 +154,6 @@ static void vEthernetTask(void *pvParameters)
 		/* Only check for connection state when the PHY status has changed */
 		if (physts & PHY_LINK_CHANGED)
 		{
-//			dhcp_network_changed(&lpc17xx_netif);
-
 			if (physts & PHY_LINK_CONNECTED)
 			{
 				prt_ip = false;
@@ -189,10 +185,10 @@ static void vEthernetTask(void *pvParameters)
 				{
 					vTaskDelete(hldsntp);
 					hldsntp = NULL;
-					UART_Send(LPC_UART0, "\nSNTP Off.", sizeof("\nSNTP Off."), NONE_BLOCKING);
+					UART_Send(LPC_UART0, "\nSNTP Off.", sizeof("\nSNTP Off."), BLOCKING);
 				}
 			}
-			vTaskDelay(configTICK_RATE_HZ);		/* Delay for link detection (500mS) */
+			vTaskDelay(configTICK_RATE_HZ/4);		/* Delay for link detection (250mS) */
 		}
 		//
 //		uxHighWaterMark = uxTaskGetStackHighWaterMark(NULL);

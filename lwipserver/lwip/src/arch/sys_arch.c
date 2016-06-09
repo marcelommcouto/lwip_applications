@@ -134,7 +134,7 @@ err_t sys_mbox_trypost( sys_mbox_t *pxMailBox, void *pxMessageToPost )
 {
 	err_t xReturn;
 
-	if( xQueueSend( *pxMailBox, &pxMessageToPost, 0UL ) == pdPASS )
+	if( xQueueSend( *pxMailBox, &pxMessageToPost, (portTickType)0 ) == pdPASS )
 	{
 		xReturn = ERR_OK;
 	}

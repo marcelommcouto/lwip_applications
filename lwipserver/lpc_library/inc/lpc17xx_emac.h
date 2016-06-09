@@ -79,9 +79,9 @@ extern "C"
  */
 
 /* EMAC Memory Buffer configuration for 16K Ethernet RAM */
-#define EMAC_NUM_RX_FRAG         3          /**< Num.of RX Fragments 3 * 1036 */
-#define EMAC_NUM_TX_FRAG         3			/**< Num.of TX Fragments 3 * 1036 */
-#define EMAC_ETH_MAX_FLEN        1036		/**< Max. Ethernet Frame Size     */
+#define EMAC_NUM_RX_FRAG         4          /**< Num.of RX Fragments 4 * 1536 */
+#define EMAC_NUM_TX_FRAG         3			/**< Num.of TX Fragments 3 * 1536 */
+#define EMAC_ETH_MAX_FLEN        1536		/**< Max. Ethernet Frame Size     */
 #define EMAC_TX_FRAME_TOUT       0x00100000 /**< Frame Transmit timeout count */
 
 /* --------------------- BIT DEFINITIONS -------------------------------------- */
