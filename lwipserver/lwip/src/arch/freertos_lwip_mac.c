@@ -274,13 +274,12 @@ static struct pbuf *lpc_low_level_input(struct netif *netif)
 					/* Clearing Status. */
 					lpc_enetif->prxs[idx].Info = 0xffffffff;
 					lpc_enetif->prxs[idx].HashCRC = 0xffffffff;
-
-					idx++;									/* Wrap at end of descriptor list */
+					/* Wrap at end of descriptor list */
+					idx++;
 					if (idx > (u8_t) LPC_EMAC->RxDescriptorNumber)
 					{
 						idx = 0;
 					}
-
 					/* Queue descriptor(s) */
 					lpc_enetif->rxdescnextindex = idx;
 					LPC_EMAC->RxConsumeIndex = idx;
